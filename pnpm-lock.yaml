@@ -14,6 +14,9 @@ dependencies:
   '@nestjs/core':
     specifier: ^10.0.0
     version: 10.4.13(@nestjs/common@10.4.13)(@nestjs/platform-express@10.4.13)(reflect-metadata@0.1.14)(rxjs@7.8.1)
+  '@nestjs/mapped-types':
+    specifier: '*'
+    version: 2.0.6(@nestjs/common@10.4.13)(reflect-metadata@0.1.14)
   '@nestjs/platform-express':
     specifier: ^10.0.0
     version: 10.4.13(@nestjs/common@10.4.13)(@nestjs/core@10.4.13)
@@ -55,6 +58,9 @@ devDependencies:
   '@swc/core':
     specifier: ^1.10.0
     version: 1.10.0
+  '@swc/jest':
+    specifier: ^0.2.37
+    version: 0.2.37(@swc/core@1.10.0)
   '@types/express':
     specifier: ^4.17.17
     version: 4.17.21
@@ -662,6 +668,13 @@ packages:
       - ts-node
     dev: true
 
+  /@jest/create-cache-key-function@29.7.0:
+    resolution: {integrity: sha512-4QqS3LY5PBmTRHj9sAg1HLoPzqAI0uOX6wI/TRqHIcOxlFidy6YEmCQJk6FSZjNLGCeubDMfmkWL+qaLKhSGQA==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      '@jest/types': 29.6.3
+    dev: true
+
   /@jest/environment@29.7.0:
     resolution: {integrity: sha512-aQIfHDq33ExsN4jP1NWGXhxgQ/wixs60gDiKO+XVMd8Mn0NWPWgc34ZQDTb2jKaUWQ7MuwoitXAsN2XVXNMpAw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -1154,6 +1167,23 @@ packages:
     transitivePeerDependencies:
       - encoding
 
+  /@nestjs/mapped-types@2.0.6(@nestjs/common@10.4.13)(reflect-metadata@0.1.14):
+    resolution: {integrity: sha512-84ze+CPfp1OWdpRi1/lOu59hOhTz38eVzJvRKrg9ykRFwDz+XleKfMsG0gUqNZYFa6v53XYzeD+xItt8uDW7NQ==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      class-transformer: ^0.4.0 || ^0.5.0
+      class-validator: ^0.13.0 || ^0.14.0
+      reflect-metadata: ^0.1.12 || ^0.2.0
+    peerDependenciesMeta:
+      class-transformer:
+        optional: true
+      class-validator:
+        optional: true
+    dependencies:
+      '@nestjs/common': 10.4.13(reflect-metadata@0.1.14)(rxjs@7.8.1)
+      reflect-metadata: 0.1.14
+    dev: false
+
   /@nestjs/platform-express@10.4.13(@nestjs/common@10.4.13)(@nestjs/core@10.4.13):
     resolution: {integrity: sha512-9Uar9t5NZebI9Y8P8B6OYTfj6p5DuUHM/nk2zGwbL3SLdnieP4O2K1DuePo3SWiYBStmPoTAlXyl6L2zDtrLjQ==}
     peerDependencies:
@@ -1446,6 +1476,18 @@ packages:
 
   /@swc/counter@0.1.3:
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
+    dev: true
+
+  /@swc/jest@0.2.37(@swc/core@1.10.0):
+    resolution: {integrity: sha512-CR2BHhmXKGxTiFr21DYPRHQunLkX3mNIFGFkxBGji6r9uyIR5zftTOVYj1e0sFNMV2H7mf/+vpaglqaryBtqfQ==}
+    engines: {npm: '>= 7.0.0'}
+    peerDependencies:
+      '@swc/core': '*'
+    dependencies:
+      '@jest/create-cache-key-function': 29.7.0
+      '@swc/core': 1.10.0
+      '@swc/counter': 0.1.3
+      jsonc-parser: 3.3.1
     dev: true
 
   /@swc/types@0.1.17:
