@@ -3,9 +3,9 @@ import { Controller, Get, Version } from '@nestjs/common';
 // import { InjectRepository } from '@nestjs/typeorm';
 // import { Users } from './user/user.entity';
 // import { Repository } from 'typeorm';
-import { InjectModel } from '@nestjs/mongoose';
-import { User } from './user/user.schema';
-import { Model } from 'mongoose';
+// import { InjectModel } from '@nestjs/mongoose';
+// import { User } from './user/user.schema';
+// import { Model } from 'mongoose';
 
 @Controller()
 export class AppController {
@@ -15,7 +15,7 @@ export class AppController {
   //   @InjectRepository(Users) private readonly user: Repository<Users>,
   // ) {}
 
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  // constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   @Get()
   getHello(): string {
@@ -24,10 +24,10 @@ export class AppController {
 
   @Get()
   @Version('2')
-  async getHelloV2(): Promise<string> {
+  async getHelloV2() {
     // const users = await this.prisma.user.findMany();
     // const users = await this.user.find();
-    const users = await this.userModel.find();
-    return JSON.stringify(users);
+    // const users = await this.userModel.find();
+    // return JSON.stringify(users);
   }
 }
