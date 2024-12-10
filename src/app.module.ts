@@ -11,6 +11,7 @@ import { User, UserSchema } from './user/user.schema';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Users } from './user/user.entity';
+import { UserRepository } from './user/user.repository';
 
 @Module({
   imports: [
@@ -57,6 +58,6 @@ import { Users } from './user/user.entity';
     // MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [UserRepository],
 })
 export class AppModule {}
