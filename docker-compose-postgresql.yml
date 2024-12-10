@@ -1,20 +1,5 @@
 services:
   db:
-    image: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-    ports:
-      - 3306:3306
-
-  db1:
-    image: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-    ports:
-      - 3307:3306
-  db2:
     image: postgres
     restart: always
     environment:

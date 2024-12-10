@@ -39,11 +39,13 @@ import { AppService } from './app.service';
       // name: 'mysql1',
       inject: [ConfigService, AppService],
       useFactory: (configService: ConfigService, appService: AppService) => {
-        const dbPort = appService.getDBPort();
-        return {
+        const dbConfig = appService.getDBConfig();
+        console.log(dbConfig);
+
+        const defaultConfig = {
           type: configService.get('DB_TYPE'),
           host: configService.get('DB_HOST'),
-          port: dbPort,
+          port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
@@ -51,6 +53,9 @@ import { AppService } from './app.service';
           synchronize: configService.get('DB_SYNC'),
           autoLoadEntities: true,
         } as TypeOrmModuleOptions;
+
+        const config = { ...defaultConfig, ...dbConfig };
+        return config as TypeOrmModuleOptions;
       },
       extraProviders: [AppService],
     }),
