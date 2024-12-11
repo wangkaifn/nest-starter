@@ -2,62 +2,36 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from './common/config/config.module';
 import { LoggerModule } from './common/Logger/Logger.module';
-// import { PrismaModule } from './database/prisma/prisma.module';
-// import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-// import { ConfigService } from '@nestjs/config';
-// import { Users } from './user/user.entity';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './user/user.schema';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigService } from '@nestjs/config';
+
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from './user/user.entity';
-import { UserRepository } from './user/user.repository';
+import { TypeOrmConfigService } from './database/typeorm/typeorm-config.service';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { AppService } from './app.service';
 
+const connections = new Map();
 @Module({
   imports: [
     ConfigModule,
     LoggerModule,
     // PrismaModule,
-    // TypeOrmModule.forRootAsync({
-    //   inject: [ConfigService],
-    //   useFactory: (configService: ConfigService) => {
-    //     return {
-    //       type: configService.get('DB_TYPE'),
-    //       host: configService.get('DB_HOST'),
-    //       port: configService.get('DB_PORT'),
-    //       username: configService.get('DB_USERNAME'),
-    //       password: configService.get('DB_PASSWORD'),
-    //       database: configService.get('DB_DATABASE'),
-    //       // entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    //       synchronize: configService.get('DB_SYNC'),
-    //       autoLoadEntities: true,
-    //     } as TypeOrmModuleOptions;
-    //   },
-    // }),
     TypeOrmModule.forRootAsync({
-      // name: 'mysql1',
-      inject: [ConfigService, AppService],
-      useFactory: (configService: ConfigService, appService: AppService) => {
-        const dbConfig = appService.getDBConfig();
-        console.log(dbConfig);
+      useClass: TypeOrmConfigService,
+      dataSourceFactory: async (
+        options: DataSourceOptions & { tenantId: string },
+      ) => {
+        const tenantId = options?.tenantId || 'default';
+        if (tenantId && connections.has(tenantId)) {
+          console.log(`已经连接到${tenantId}数据库`);
 
-        const defaultConfig = {
-          type: configService.get('DB_TYPE'),
-          host: configService.get('DB_HOST'),
-          port: configService.get('DB_PORT'),
-          username: configService.get('DB_USERNAME'),
-          password: configService.get('DB_PASSWORD'),
-          database: configService.get('DB_DATABASE'),
-          // entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          synchronize: configService.get('DB_SYNC'),
-          autoLoadEntities: true,
-        } as TypeOrmModuleOptions;
+          return connections.get(tenantId);
+        }
+        const dataSource = await new DataSource(options).initialize();
+        connections.set(tenantId, dataSource);
+        console.log(`连接到${tenantId}数据库`);
 
-        const config = { ...defaultConfig, ...dbConfig };
-        return config as TypeOrmModuleOptions;
+        return dataSource;
       },
-      extraProviders: [AppService],
     }),
     TypeOrmModule.forFeature([Users]),
     // TypeOrmModule.forFeature([Users], 'mysql1'),
@@ -66,6 +40,12 @@ import { AppService } from './app.service';
     // MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    AppService,
+    {
+      provide: 'TYPEORM_CONNECTIONS',
+      useValue: connections,
+    },
+  ],
 })
 export class AppModule {}

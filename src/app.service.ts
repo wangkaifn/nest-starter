@@ -1,31 +1,17 @@
-import { Inject } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Inject, OnApplicationShutdown } from '@nestjs/common';
+import { DataSource } from 'typeorm';
 
-export class AppService {
+export class AppService implements OnApplicationShutdown {
   constructor(
-    @Inject(REQUEST)
-    private readonly request: Request,
+    @Inject('TYPEORM_CONNECTIONS')
+    private readonly connections: Map<string, DataSource>,
   ) {}
-
-  getDBConfig(): TypeOrmModuleOptions {
-    const headers = this.request.headers;
-    const tenantId = headers['x-tenant-id'];
-    if (tenantId === 'mysql1') {
-      return {
-        port: 3307,
-      };
-    } else if (tenantId === 'postgres') {
-      return {
-        type: 'postgres',
-        port: 5432,
-        username: 'pguser',
-        password: 'example',
-        database: 'testdb',
-      };
+  onApplicationShutdown() {
+    if (this.connections.size > 0) {
+      console.log('关闭数据库连接', this.connections.size);
+      for (const key of this.connections.keys()) {
+        this.connections.get(key)?.destroy();
+      }
     }
-    return {
-      port: 3306,
-    };
   }
 }

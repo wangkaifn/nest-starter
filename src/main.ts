@@ -34,6 +34,9 @@ async function bootstrap() {
     defaultVersion: !versionStr ? VERSION_NEUTRAL : version,
   });
 
+  // 启用 NestJS 应用的关闭钩子（shutdown hooks）
+  // 在关闭时执行必要的清理工作，例如关闭数据库连接、释放资源等
+  app.enableShutdownHooks();
   const port = configService.get('NEXT_PORT', 3000);
   logger.log(`当前服务运行在${port}端口`);
   await app.listen(port);
