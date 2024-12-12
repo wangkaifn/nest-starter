@@ -21,7 +21,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:push": "prisma db push",
     "typeorm": "typeorm-ts-node-commonjs -d ormconfig.ts",
-    "typeorm:sync": "npm run typeorm schema:sync"
+    "typeorm:sync": "npm run typeorm schema:sync",
+    "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

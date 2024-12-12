@@ -3,6 +3,7 @@ import { Controller, Get, Version } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './user/user.entity';
 import { Repository } from 'typeorm';
+import { PrismaClient } from '@prisma/client';
 // import { UserRepository } from './user/user.repository';
 // import { InjectModel } from '@nestjs/mongoose';
 // import { User } from './user/user.schema';
@@ -11,26 +12,26 @@ import { Repository } from 'typeorm';
 @Controller()
 export class AppController {
   // private userRepository;
-  // constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
   // constructor(private readonly repository: UserRepository) {
   //   this.userRepository = repository.findAll();
   // }
 
   // constructor(@InjectModel(User.name) private userModel: Model<User>) {}
-  constructor(
-    @InjectRepository(Users) private readonly user: Repository<Users>,
-  ) {}
+  // constructor(
+  //   @InjectRepository(Users) private readonly user: Repository<Users>,
+  // ) {}
 
   @Get()
   @Version('1')
   async getHello() {
-    return await this.user.find();
+    return await this.prisma.user.findMany();
   }
 
   @Get()
   @Version('2')
   async getHelloV2() {
-    return await this.user.find();
+    return await this.prisma.user.findMany();
   }
 }

@@ -13,7 +13,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     connectionName?: string,
   ): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
     const headers = this.request.headers;
-    const tenantId = headers['x-tenant-id'];
+    const tenantId = headers['x-tenant-id'] || connectionName || 'default';
 
     const envConfig = {
       type: this.configService.get('DB_TYPE'),
