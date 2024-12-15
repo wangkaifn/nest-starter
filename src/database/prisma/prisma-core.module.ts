@@ -4,6 +4,7 @@ import { getDBType } from './prisma.utils';
 
 import { PrismaClient as MysqlClient } from 'prisma-mysql';
 import { PrismaClient as PgClient } from 'prisma-postgresql';
+import { PRISMA_CONNECTION_NAME } from './prisma.constants';
 
 @Module({})
 @Global()
@@ -11,23 +12,29 @@ export class PrismaCoreModule implements OnApplicationShutdown {
   onApplicationShutdown() {
     throw new Error('Method not implemented.');
   }
-  static forRoot(options: PrimaModuleOptions) {
-    console.log(options);
+  static forRoot(_options: PrimaModuleOptions) {
+    const { options, name, url } = _options;
+    let newOptions = {
+      datasourceUrl: url,
+    };
+    if (options && Object.keys(options).length > 0) {
+      newOptions = {
+        ...newOptions,
+        ...options,
+      };
+    }
+    const providerName = name || PRISMA_CONNECTION_NAME;
 
     const prismaClientProvider = {
-      provide: 'PRISMA_CLIENT',
+      provide: providerName,
       useFactory: () => {
-        const dbType = getDBType(options.url);
+        const dbType = getDBType(url);
         console.log(dbType, 'dbType');
 
-        const _options = {
-          datasourceUrl: options.url,
-          ...options.options,
-        };
         if (dbType === 'mysql') {
-          return new MysqlClient(_options);
+          return new MysqlClient(newOptions);
         } else if (dbType === 'postgresql') {
-          return new PgClient(_options);
+          return new PgClient(newOptions);
         } else {
           throw new Error('Database type not supported');
         }
