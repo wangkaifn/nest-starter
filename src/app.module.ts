@@ -15,7 +15,7 @@ const connections = new Map();
   imports: [
     ConfigModule,
     LoggerModule,
-    PrismaModule.forRoot('mysql://root:example@localhost:3306/testdb'),
+    PrismaModule.forRoot('postgresql://pguser:example@localhost:5432/testdb'),
     // PrismaModule,
     // TypeOrmModule.forRootAsync({
     //   useClass: TypeOrmConfigService,

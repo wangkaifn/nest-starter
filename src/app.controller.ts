@@ -1,4 +1,4 @@
-import { Controller, Get, Version } from '@nestjs/common';
+import { Controller, Get, Inject, Version } from '@nestjs/common';
 // import { PrismaService } from './database/prisma/prisma.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './user/user.entity';
@@ -12,7 +12,7 @@ import { PrismaClient } from '@prisma/client';
 @Controller()
 export class AppController {
   // private userRepository;
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(@Inject('PRISMA_CLIENT') private readonly prisma) {}
 
   // constructor(private readonly repository: UserRepository) {
   //   this.userRepository = repository.findAll();
