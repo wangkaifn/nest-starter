@@ -14,7 +14,7 @@ export class AppController {
   // private userRepository;
   constructor(
     @Inject('prisma1') private readonly prisma1: PrismaClient,
-    @Inject('prisma2') private readonly prisma2: PrismaClient,
+    // @Inject('prisma2') private readonly prisma2: PrismaClient,
   ) {}
 
   // constructor(private readonly repository: UserRepository) {
@@ -35,6 +35,6 @@ export class AppController {
   @Get()
   @Version('2')
   async getHelloV2() {
-    return await this.prisma2.user.findMany();
+    // return await this.prisma2.user.findMany();
   }
 }
