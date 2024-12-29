@@ -1,12 +1,15 @@
 import { DynamicModule, Module } from '@nestjs/common';
 // import { PrismaService } from './prisma.service';
-import { PrimaModuleOptions } from './prisma-options.interface';
+import {
+  PrismaModuleAsyncOptions,
+  PrismaModuleOptions,
+} from './prisma-options.interface';
 import { PrismaCoreModule } from './prisma-core.module';
 
 @Module({})
 export class PrismaModule {
   static forRoot(url: string): DynamicModule;
-  static forRoot(options: PrimaModuleOptions): DynamicModule;
+  static forRoot(options: PrismaModuleOptions): DynamicModule;
   static forRoot(url: string, name?: string): DynamicModule;
   static forRoot(arg: any, ...rest): DynamicModule {
     const _options =
@@ -17,17 +20,14 @@ export class PrismaModule {
           : arg;
     return {
       module: PrismaModule,
-      // providers: [PrismaService],
-      // exports: [PrismaService],
       imports: [PrismaCoreModule.forRoot(_options)],
     };
   }
 
-  static forFeature() {
+  static forRootAsync(options: PrismaModuleAsyncOptions) {
     return {
       module: PrismaModule,
-      providers: [],
-      exports: [],
+      imports: [PrismaCoreModule.forRootAsync(options)],
     };
   }
 }

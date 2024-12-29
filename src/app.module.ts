@@ -9,16 +9,21 @@ import { TypeOrmConfigService } from './database/typeorm/typeorm-config.service'
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { AppService } from './app.service';
 import { PrismaModule } from './database/prisma/prisma.module';
+import { PrismaService } from './database/prisma/prisma.service';
 
 const connections = new Map();
 @Module({
   imports: [
     ConfigModule,
     LoggerModule,
-    PrismaModule.forRoot(
-      'postgresql://pguser:example@localhost:54132/testdb',
-      'prisma1',
-    ),
+    PrismaModule.forRootAsync({
+      name: 'prisma1',
+      useClass: PrismaService,
+    }),
+    // PrismaModule.forRoot(
+    //   'postgresql://pguser:example@localhost:5432/testdb',
+    //   'prisma1',
+    // ),
     // PrismaModule.forRoot(
     //   'mysql://root:example@localhost:3306/testdb',
     //   'prisma2',

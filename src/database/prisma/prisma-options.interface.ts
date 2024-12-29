@@ -1,9 +1,10 @@
+import { ModuleMetadata, Type } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 /**
- * PrimaModuleOptions 接口定义了Prima模块的配置选项。
+ * PrismaModuleOptions 接口定义了Prima模块的配置选项。
  */
-export interface PrimaModuleOptions {
+export interface PrismaModuleOptions {
   /**
    * 数据库连接的URL。
    */
@@ -47,4 +48,21 @@ export interface PrimaModuleOptions {
   connectionErrorFactory?: (
     error: Prisma.PrismaClientKnownRequestError,
   ) => Prisma.PrismaClientKnownRequestError;
+}
+
+export interface PrismaOptionsFactory {
+  createPrismaModuleOptions():
+    | Promise<PrismaModuleOptions>
+    | PrismaModuleOptions;
+}
+export type PrismaModuleOptionsFactory = Omit<PrismaModuleOptions, 'name'>;
+export interface PrismaModuleAsyncOptions
+  extends Pick<ModuleMetadata, 'imports'> {
+  name?: string;
+  useExisting?: Type<PrismaOptionsFactory>;
+  useClass?: Type<PrismaOptionsFactory>;
+  useFactory?: (
+    ...args: any[]
+  ) => Promise<PrismaModuleOptionsFactory> | PrismaModuleOptionsFactory;
+  inject?: any[];
 }
