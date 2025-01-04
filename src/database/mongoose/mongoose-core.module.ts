@@ -31,9 +31,12 @@ import {
   MongooseOptionsFactory,
 } from '@nestjs/mongoose';
 import { handleRetry } from './mongoose.utils';
+import { MongooseCommonModule } from './mongoose-common.module';
 
 @Global()
-@Module({})
+@Module({
+  imports: [MongooseCommonModule]
+})
 export class MongooseCoreModule implements OnApplicationShutdown {
   private static connections: Record<string, mongoose.Connection> = {};
   constructor(

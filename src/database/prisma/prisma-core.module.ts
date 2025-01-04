@@ -21,8 +21,11 @@ import {
   PRISMA_MODULE_OPTIONS,
 } from './prisma.constants';
 import { catchError, defer, lastValueFrom } from 'rxjs';
+import { PrismaCommonModule } from './prisma-common.module';
 
-@Module({})
+@Module({
+  imports: [PrismaCommonModule]
+})
 @Global()
 export class PrismaCoreModule implements OnApplicationShutdown {
   private static connections: Record<string, any> = {};
