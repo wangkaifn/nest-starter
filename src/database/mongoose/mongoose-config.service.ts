@@ -14,12 +14,16 @@ export class MongooseConfigService implements MongooseOptionsFactory {
     const headers = this.request.headers;
     const tenantId = headers['x-tenant-id'] || 'default';
 
+    console.log('tenantId', tenantId);
+
     let url;
     const defaultUrl = 'mongodb://root:example@localhost:27017/user';
-    if (tenantId === 'default') {
+    if (tenantId === 'mongo') {
       url = defaultUrl;
-    } else {
+    } else if (tenantId === 'mongo1') {
       url = 'mongodb://root:example@localhost:27018/user';
+    } else {
+      url = defaultUrl;
     }
     return {
       uri: url,

@@ -1,5 +1,4 @@
 import { DynamicModule, Module } from '@nestjs/common';
-// import { PrismaService } from './prisma.service';
 import {
   PrismaModuleAsyncOptions,
   PrismaModuleOptions,
@@ -8,16 +7,21 @@ import { PrismaCoreModule } from './prisma-core.module';
 
 @Module({})
 export class PrismaModule {
-  static forRoot(url: string): DynamicModule;
   static forRoot(options: PrismaModuleOptions): DynamicModule;
-  static forRoot(url: string, name?: string): DynamicModule;
-  static forRoot(arg: any, ...rest): DynamicModule {
-    const _options =
-      rest?.length > 0
-        ? { url: arg, name: rest[0] }
-        : typeof arg === 'string'
-          ? { url: arg }
-          : arg;
+  static forRoot(url: string): DynamicModule;
+  static forRoot(url: string, name: string): DynamicModule;
+  static forRoot(arg: any, ...args): DynamicModule {
+    let _options: PrismaModuleOptions;
+
+    if (args && args.length) {
+      _options = { url: arg, name: args[0] };
+    } // TODO
+    else if (typeof arg === 'string') {
+      _options = { url: arg };
+    } else {
+      _options = arg;
+    }
+
     return {
       module: PrismaModule,
       imports: [PrismaCoreModule.forRoot(_options)],

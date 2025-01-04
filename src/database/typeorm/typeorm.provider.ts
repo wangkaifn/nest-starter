@@ -2,7 +2,7 @@ import { Inject, OnApplicationShutdown } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { TYPEORM_CONNECTIONS } from './typeorm.constants';
 
-export class TypeOrmProvider implements OnApplicationShutdown {
+export class TypeormProvider implements OnApplicationShutdown {
   constructor(
     @Inject(TYPEORM_CONNECTIONS)
     private readonly connections: Map<string, DataSource>,

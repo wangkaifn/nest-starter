@@ -21,21 +21,11 @@ import {
   PRISMA_MODULE_OPTIONS,
 } from './prisma.constants';
 import { catchError, defer, lastValueFrom } from 'rxjs';
-import { PrismaCommonModule } from './prisma-common.module';
 
-@Module({
-  imports: [PrismaCommonModule]
-})
+@Module({})
 @Global()
 export class PrismaCoreModule implements OnApplicationShutdown {
   private static connections: Record<string, any> = {};
-
-  /**
-   * 在应用程序关闭时调用的方法。
-   *
-   * 该方法会遍历 PrismaCoreModule.connections 对象中的所有连接，
-   * 如果连接对象存在且存在 $disconnect 方法，则调用该方法断开连接。
-   */
   onApplicationShutdown() {
     // throw new Error('Method not implemented.');
     if (
@@ -116,18 +106,13 @@ export class PrismaCoreModule implements OnApplicationShutdown {
     };
   }
 
-  /**
-   * 用于异步配置 Prisma 模块的根模块。
-   *
-   * @param _options - Prisma 模块异步配置选项
-   * @returns 一个 DynamicModule 实例
-   */
   static forRootAsync(_options: PrismaModuleAsyncOptions): DynamicModule {
     const providerName = _options.name || PRISMA_CONNECTION_NAME;
 
     const prismaClientProvider: Provider = {
       provide: providerName,
       useFactory: (prismaModuleOptions: PrismaModuleOptions) => {
+        if (!prismaModuleOptions) return;
         const {
           url,
           options = {},

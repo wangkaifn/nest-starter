@@ -32,21 +32,19 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       port: 3306,
     };
 
-    if (tenantId === 'mysql1') {
+    if (tenantId === 'typeorm2') {
       config = {
         port: 3307,
       };
-    } else if (tenantId === 'postgres') {
+    } else if (tenantId === 'typeorm3') {
       config = {
         type: 'postgres',
         port: 5432,
         username: 'pguser',
-        password: 'example',
         database: 'testdb',
       };
     }
-
-    const finalConfig = { ...envConfig, ...config };
-    return finalConfig as TypeOrmModuleOptions;
+    const finalConfig = Object.assign(envConfig, config);
+    return finalConfig;
   }
 }

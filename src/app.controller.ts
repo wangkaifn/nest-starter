@@ -1,18 +1,16 @@
-import { Controller, Get, Inject, Version } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { Controller, Get, Version } from '@nestjs/common';
 
-import { Model } from 'mongoose';
-import { User } from './user/user.schema';
+import { UserRepository } from './user/user.repository';
 
 @Controller()
 export class AppController {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(private userRepository: UserRepository) {}
 
   @Get()
   @Version('1')
   async getHello() {
     // return await this.prisma1.user.findMany();
-    return await this.userModel.find();
+    return await this.userRepository.find();
   }
 
   @Get()
