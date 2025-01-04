@@ -10,16 +10,19 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { AppService } from './app.service';
 import { PrismaModule } from './database/prisma/prisma.module';
 import { PrismaService } from './database/prisma/prisma.service';
+import { User, UserSchema } from './user/user.schema';
+import { MongooseConfigService } from './database/mongoose/mongoose-config.service';
+import { MongooseModule } from './database/mongoose/mongoose.module';
 
 const connections = new Map();
 @Module({
   imports: [
     ConfigModule,
     LoggerModule,
-    PrismaModule.forRootAsync({
-      name: 'prisma1',
-      useClass: PrismaService,
-    }),
+    // PrismaModule.forRootAsync({
+    //   name: 'prisma1',
+    //   useClass: PrismaService,
+    // }),
     // PrismaModule.forRoot(
     //   'postgresql://pguser:example@localhost:5432/testdb',
     //   'prisma1',
@@ -49,9 +52,11 @@ const connections = new Map();
     // }),
     // TypeOrmModule.forFeature([Users]),
     // TypeOrmModule.forFeature([Users], 'mysql1'),
-    // MongooseModule.forRoot('mongodb://root:example@localhost:27017/user'),
-
-    // MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forRoot('mongodb://root:example@localhost:27017/user'),
+    MongooseModule.forRootAsync({
+      useClass: MongooseConfigService,
+    }),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AppController],
   providers: [
