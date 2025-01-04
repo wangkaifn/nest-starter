@@ -1,18 +1,13 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
 import {
   PrismaModuleOptions,
   PrismaOptionsFactory,
 } from './prisma-options.interface';
 import { REQUEST } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PrismaService implements OnModuleInit, PrismaOptionsFactory {
-  constructor(
-    @Inject(REQUEST) private request: Request,
-    private configService: ConfigService,
-  ) {}
+  constructor(@Inject(REQUEST) private request: Request) {}
   createPrismaModuleOptions():
     | Promise<PrismaModuleOptions>
     | PrismaModuleOptions {
