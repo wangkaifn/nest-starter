@@ -8,6 +8,29 @@ import { RedisModule } from '@nestjs-modules/ioredis';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-ioredis-yet';
 import { MailModule } from './common/mail/mail.module';
+import * as dotenv from 'dotenv';
+import { toBoolean } from './utils/format';
+
+const conditionalImports = () => {
+  const imports = [];
+
+  const parsedConfig = {};
+  const envFilePaths = ['.env', `.env.${process.env.NODE_ENV}`];
+  envFilePaths.forEach((envFilePath) => {
+    try {
+      const config = dotenv.config({ path: envFilePath }).parsed;
+      Object.assign(parsedConfig, config);
+    } catch (error) {
+      console.error(`Error loading ${envFilePath} file`);
+    }
+  });
+  console.log('parsedConfig', parsedConfig);
+  if (toBoolean(parsedConfig['MAIL_ON'])) {
+    imports.push(MailModule);
+  }
+
+  return imports;
+};
 
 @Module({
   imports: [
@@ -27,6 +50,7 @@ import { MailModule } from './common/mail/mail.module';
     //     },
     //   }),
     // }),
+
     CacheModule.register({
       ttl: 30 * 1000,
       store: redisStore,
@@ -38,7 +62,7 @@ import { MailModule } from './common/mail/mail.module';
     LoggerModule,
     DatabaseModule,
     UserModule,
-    MailModule,
+    ...conditionalImports(),
   ],
   controllers: [AppController],
   providers: [],
