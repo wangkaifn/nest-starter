@@ -1,15 +1,22 @@
-import { InjectRedis } from '@nestjs-modules/ioredis';
-import { Controller, Get, Query } from '@nestjs/common';
-import Redis from 'ioredis';
-
+import { CACHE_MANAGER, CacheInterceptor } from '@nestjs/cache-manager';
+import {
+  Controller,
+  Get,
+  Inject,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
+import { Cache } from '@nestjs/cache-manager';
 @Controller()
+// @UseInterceptors(CacheInterceptor)
 export class AppController {
-  constructor(@InjectRedis() private readonly redis: Redis) {}
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   @Get()
   async getHello(@Query('key') key: string) {
-    await this.redis.set('key', key || 'default', 'EX', 60);
-    const redisData = await this.redis.get('key');
-    return { redisData };
+    const value = await this.cacheManager.get('key');
+    console.log('value', value);
+    await this.cacheManager.set('key', key || 'default key');
+    return { key: value };
   }
 }

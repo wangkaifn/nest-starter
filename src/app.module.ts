@@ -5,6 +5,7 @@ import { LoggerModule } from './common/Logger/Logger.module';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { RedisModule } from '@nestjs-modules/ioredis';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -15,14 +16,17 @@ import { RedisModule } from '@nestjs-modules/ioredis';
     //     password: 'example',
     //   },
     // }),
-    RedisModule.forRootAsync({
-      useFactory: () => ({
-        type: 'single',
-        url: 'redis://localhost:6379',
-        options: {
-          password: 'example',
-        },
-      }),
+    // RedisModule.forRootAsync({
+    //   useFactory: () => ({
+    //     type: 'single',
+    //     url: 'redis://localhost:6379',
+    //     options: {
+    //       password: 'example',
+    //     },
+    //   }),
+    // }),
+    CacheModule.register({
+      ttl: 3 * 1000,
     }),
     ConfigModule,
     LoggerModule,
