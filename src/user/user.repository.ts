@@ -1,5 +1,5 @@
 import { REQUEST } from '@nestjs/core';
-import { Inject } from '@nestjs/common';
+import { Inject, Optional } from '@nestjs/common';
 
 import { Request } from 'express';
 import { UserMongooseRepository } from './repository/user.mongoose.repository';
@@ -12,9 +12,9 @@ export class UserRepository implements UserAbstractRepository {
   constructor(
     @Inject(REQUEST)
     private readonly request: Request,
-    private readonly userMongooseRepository: UserMongooseRepository,
-    private readonly userTypeormRepository: UserTypeormRepository,
-    private readonly userPrismaRepository: UserPrismaRepository,
+    @Optional() private userMongooseRepository: UserMongooseRepository,
+    @Optional() private userTypeormRepository: UserTypeormRepository,
+    @Optional() private userPrismaRepository: UserPrismaRepository,
   ) {}
   find(): Promise<any[]> {
     const client = this.getRepository();
@@ -46,6 +46,8 @@ export class UserRepository implements UserAbstractRepository {
     ) {
       return this.userTypeormRepository;
     } else if (tenantId === 'prisma1' || tenantId === 'prisma2') {
+      return this.userPrismaRepository;
+    } else {
       return this.userPrismaRepository;
     }
   }

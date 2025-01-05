@@ -4,10 +4,14 @@ import {
   PrismaOptionsFactory,
 } from './prisma-options.interface';
 import { REQUEST } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PrismaService implements OnModuleInit, PrismaOptionsFactory {
-  constructor(@Inject(REQUEST) private request: Request) {}
+  constructor(
+    @Inject(REQUEST) private request: Request,
+    private readonly configService: ConfigService,
+  ) {}
   createPrismaModuleOptions():
     | Promise<PrismaModuleOptions>
     | PrismaModuleOptions {
@@ -19,6 +23,8 @@ export class PrismaService implements OnModuleInit, PrismaOptionsFactory {
       } as PrismaModuleOptions;
     } else if (tenantId === 'prisma2') {
       return { url: 'postgresql://pguser:example@localhost:5432/testdb' };
+    } else {
+      return { url: this.configService.get('DATABASE_URL') };
     }
   }
   async onModuleInit() {}

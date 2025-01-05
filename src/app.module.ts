@@ -10,21 +10,11 @@ import { redisStore } from 'cache-manager-ioredis-yet';
 import { MailModule } from './common/mail/mail.module';
 import * as dotenv from 'dotenv';
 import { toBoolean } from './utils/format';
+import { getEnvs } from './utils/get-envs';
 
 const conditionalImports = () => {
   const imports = [];
-
-  const parsedConfig = {};
-  const envFilePaths = ['.env', `.env.${process.env.NODE_ENV}`];
-  envFilePaths.forEach((envFilePath) => {
-    try {
-      const config = dotenv.config({ path: envFilePath }).parsed;
-      Object.assign(parsedConfig, config);
-    } catch (error) {
-      console.error(`Error loading ${envFilePath} file`);
-    }
-  });
-  console.log('parsedConfig', parsedConfig);
+  const parsedConfig = getEnvs();
   if (toBoolean(parsedConfig['MAIL_ON'])) {
     imports.push(MailModule);
   }
