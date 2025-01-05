@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-ioredis-yet';
+import { MailModule } from './common/mail/mail.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { redisStore } from 'cache-manager-ioredis-yet';
     LoggerModule,
     DatabaseModule,
     UserModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [],
