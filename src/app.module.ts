@@ -6,6 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-ioredis-yet';
 
 @Module({
   imports: [
@@ -26,7 +27,11 @@ import { CacheModule } from '@nestjs/cache-manager';
     //   }),
     // }),
     CacheModule.register({
-      ttl: 3 * 1000,
+      ttl: 30 * 1000,
+      store: redisStore,
+      host: 'localhost',
+      port: 6379,
+      password: 'example',
     }),
     ConfigModule,
     LoggerModule,
