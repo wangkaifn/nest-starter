@@ -3,7 +3,11 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
-import { VERSION_NEUTRAL, VersioningType } from '@nestjs/common';
+import {
+  ValidationPipe,
+  VERSION_NEUTRAL,
+  VersioningType,
+} from '@nestjs/common';
 
 process.env;
 async function bootstrap() {
@@ -37,6 +41,13 @@ async function bootstrap() {
   // 启用 NestJS 应用的关闭钩子（shutdown hooks）
   // 在关闭时执行必要的清理工作，例如关闭数据库连接、释放资源等
   app.enableShutdownHooks();
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // true => 移除额外的属性，false => 不移除
+      whitelist: true,
+    }),
+  ); // 启用全局管道
   const port = configService.get('NEXT_PORT', 3000);
   logger.log(`当前服务运行在${port}端口`);
   await app.listen(port);

@@ -53,5 +53,6 @@ const providers = tenantMode
   imports,
   providers: [...providers, UserRepository],
   controllers: [UserController],
+  exports: [UserRepository],
 })
 export class UserModule {}
