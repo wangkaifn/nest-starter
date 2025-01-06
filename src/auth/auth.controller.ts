@@ -12,24 +12,14 @@ export class AuthController {
   ) {}
   @Post('signup')
   async signup(@Body(CreateUserPipe) dto: SignupDto) {
-    const { username, password } = dto;
-    console.log(dto);
-
-    return dto;
     return this.userRepository.create(dto);
   }
 
   @Post('signin')
   async signin(
-    @Body(
-      new ParseArrayPipe({
-        items: SignupDto,
-      }),
-    )
-    dto: SignupDto[],
+    @Body()
+    dto: SignupDto,
   ) {
-    return dto;
-    const { username, password } = dto;
-    return this.authService.signin(username, password);
+    return this.authService.signin(dto.username, dto.password);
   }
 }

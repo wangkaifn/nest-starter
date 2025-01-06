@@ -2,13 +2,14 @@ import { Inject } from '@nestjs/common';
 import { UserAbstractRepository } from '../user.abstract.repository';
 import { PrismaClient } from '@prisma/client';
 import { PRISMA_DATABASE } from '@/database/database-constants';
+import { UserAdapter } from '../user.interface';
 
-export class UserPrismaRepository implements UserAbstractRepository {
+export class UserPrismaRepository implements UserAdapter {
   constructor(
     @Inject(PRISMA_DATABASE) private readonly prismaClient: PrismaClient,
   ) {}
-  find(): Promise<any[]> {
-    return this.prismaClient.user.findMany();
+  find(username: string): Promise<any[]> {
+    return this.prismaClient.user.findMany({ where: { username } });
   }
   create(userObj: any): Promise<any> {
     return this.prismaClient.user.create({ data: userObj });
