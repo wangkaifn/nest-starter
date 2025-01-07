@@ -1,12 +1,20 @@
-import { Controller, Get, UseGuards, Version } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  UseInterceptors,
+  Version,
+} from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminGuard } from '@/common/guards/admin.guard';
 import { JwtGuard } from '@/common/guards/jwt.guard';
 import { Public } from '@/common/decorators/public.decorator';
+import { SerializeInterceptor } from '@/common/interceptors/serialize.interceptor';
 
 @Controller('user')
 @UseGuards(JwtGuard)
+// @UseInterceptors(SerializeInterceptor)
 export class UserController {
   constructor(private userRepository: UserRepository) {}
 

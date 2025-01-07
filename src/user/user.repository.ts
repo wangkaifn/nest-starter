@@ -8,6 +8,8 @@ import { UserPrismaRepository } from './repository/user.prisma.repository';
 import { UserAbstractRepository } from './user.abstract.repository';
 import { UserAdapter } from './user.interface';
 
+import * as argon2 from 'argon2';
+
 export class UserRepository implements UserAbstractRepository {
   constructor(
     @Inject(REQUEST)
@@ -20,8 +22,11 @@ export class UserRepository implements UserAbstractRepository {
     const client = this.getRepository();
     return client.find(username);
   }
-  create(userObj: any): Promise<any> {
+  async create(userObj: any): Promise<any> {
     const client = this.getRepository();
+    // 对密码加密
+    userObj.password = await argon2.hash(userObj.password);
+    console.log(userObj, 'userObj');
     return client.create(userObj);
   }
   update(userObj: any): Promise<any> {
