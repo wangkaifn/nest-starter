@@ -46,6 +46,13 @@ async function bootstrap() {
     new ValidationPipe({
       // true => 移除额外的属性，false => 不移除
       whitelist: true,
+
+      // 自动转换实体到DTO，例如将字符串转换为数字
+      transform: true,
+      transformOptions: {
+        // 启用隐式转换，例如将字符串转换为数字
+        enableImplicitConversion: true,
+      },
     }),
   ); // 启用全局管道
   const port = configService.get('NEXT_PORT', 3000);

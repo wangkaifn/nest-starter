@@ -23,6 +23,8 @@ export class AuthController {
   // @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(PublicUserDto)
   async signup(@Body(CreateUserPipe) dto: SignupDto): Promise<PublicUserDto> {
+    console.log(CreateUserPipe, 'CreateUserPipe');
+    return CreateUserPipe;
     const user = await this.authService.signup(dto.username, dto.password);
     return new PublicUserDto({ ...user });
   }

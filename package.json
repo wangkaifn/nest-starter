@@ -22,7 +22,10 @@
     "db:push": "prisma db push",
     "typeorm": "typeorm-ts-node-commonjs -d ormconfig.ts",
     "typeorm:sync": "npm run typeorm schema:sync",
-    "prisma:generate": "npx prisma generate"
+    "prisma:generate": "prisma generate",
+    "prisma:db:push": "prisma db push",
+    "prisma:db:reset": "prisma migrate reset ",
+    "prisma:db:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@nestjs-modules/ioredis": "^2.0.2",

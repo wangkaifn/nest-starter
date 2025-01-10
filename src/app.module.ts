@@ -12,6 +12,8 @@ import * as dotenv from 'dotenv';
 import { toBoolean } from './utils/format';
 import { getEnvs } from './utils/get-envs';
 import { AuthModule } from './auth/auth.module';
+import { RoleModule } from './role/role.module';
+import { PermissionModule } from './permission/permission.module';
 
 const conditionalImports = () => {
   const imports = [];
@@ -25,23 +27,6 @@ const conditionalImports = () => {
 
 @Module({
   imports: [
-    // RedisModule.forRoot({
-    //   type: 'single',
-    //   url: 'redis://localhost:6379',
-    //   options: {
-    //     password: 'example',
-    //   },
-    // }),
-    // RedisModule.forRootAsync({
-    //   useFactory: () => ({
-    //     type: 'single',
-    //     url: 'redis://localhost:6379',
-    //     options: {
-    //       password: 'example',
-    //     },
-    //   }),
-    // }),
-
     CacheModule.register({
       ttl: 30 * 1000,
       store: redisStore,
@@ -55,6 +40,8 @@ const conditionalImports = () => {
     UserModule,
     ...conditionalImports(),
     AuthModule,
+    RoleModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [],
